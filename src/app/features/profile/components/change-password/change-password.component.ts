@@ -10,6 +10,8 @@ import {
 } from '@angular/forms';
 import { UserService } from '../../../../core/services/user/user.service';
 import { IchangePassword } from '../../../../core/models/ichange-password.interface';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-change-password',
@@ -20,9 +22,11 @@ import { IchangePassword } from '../../../../core/models/ichange-password.interf
 export class ChangePasswordComponent {
   changePasswordForm!: FormGroup;
   private readonly userService = inject(UserService);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
     this.createForm();
+    this.themeMode();
   }
 
   // ^Create new form
@@ -59,6 +63,17 @@ export class ChangePasswordComponent {
     input.type = input.type === 'password' ? 'text' : 'password';
   }
 
+  bgColor: string = '#f9f9fb';
+  themeMode() {
+    const theme = localStorage.getItem('theme');
+
+    if (theme === 'light' || theme === null) {
+      this.bgColor = '#f9f9fb';
+    } else if (theme === 'dark') {
+      this.bgColor = '#1a1625';
+    }
+  }
+
   // ^submit new password
   submitChangePassword(): void {
     if (this.changePasswordForm.valid) {
@@ -68,9 +83,22 @@ export class ChangePasswordComponent {
         password: formValue.password,
         newPassword: formValue.newPassword,
       };
+
       this.userService.changePassword(data).subscribe({
         next: (res) => {
           console.log(res);
+
+          this.changePasswordForm.reset();
+          localStorage.removeItem('socialToken');
+
+          Swal.fire({
+            title: 'Password changed successfully!',
+            text: 'Please login again',
+            icon: 'success',
+            background: this.bgColor,
+          }).then(() => {
+            this.router.navigate(['/login']);
+          });
         },
         error: (err) => {
           console.log(err);
