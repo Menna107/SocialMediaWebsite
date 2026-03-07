@@ -41,6 +41,12 @@ export class HomeComponent implements OnInit {
       this.postComponent.loadCommunityPosts();
     }
   }
+  showFeed() {
+    if (this.postComponent) {
+      this.postComponent.source = 'feed';
+      this.postComponent.getAllPosts();
+    }
+  }
 
   // ^Search Logic
   filterUsers() {

@@ -282,6 +282,12 @@
   </div>
 }
 
+@if (postList.length === 0) {
+  <div class="text-center py-14 text-gray-500">
+    <p>No Posts yet</p>
+  </div>
+}
+
 <!-- ~Share Post Modal -->
 @if (selectedPostToShare) {
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">

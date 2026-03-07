@@ -148,6 +148,55 @@
       <!-- ~Create Post Card -->
       <app-create-post></app-create-post>
 
+      <!-- ~Menu (Community, Feed) Links -->
+      <div class="p-2 my-4 lg:hidden bg-formBg dark:bg-formBg-dark shadow-lg overflow-hidden">
+        <!-- Community -->
+        <a
+          (click)="showCommunity()"
+          class="group flex items-center justify-between p-3 transition-all duration-300 border-s-4 border-white dark:border-formBg-dark hover:border-mainText dark:hover:bg-dropdown-dark hover:shadow-md cursor-pointer"
+        >
+          <div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+            <i class="fa-solid fa-earth-americas"></i>
+            <span
+              class="text-sm font-medium group-hover:text-mainText dark:group-hover:text-mainText-dark transition"
+            >
+              community
+            </span>
+          </div>
+        </a>
+
+        <!-- Feed -->
+        <a
+          (click)="showFeed()"
+          class="group flex items-center justify-between p-3 transition-all duration-300 border-s-4 border-white dark:border-formBg-dark hover:border-mainText dark:hover:bg-dropdown-dark hover:shadow-md cursor-pointer"
+        >
+          <div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+            <i class="fa-solid fa-house text-sm"></i>
+
+            <span
+              class="text-sm font-medium group-hover:text-mainText dark:group-hover:text-mainText-dark transition"
+            >
+              Feed
+            </span>
+          </div>
+        </a>
+
+        <!-- Follow -->
+        <a
+          (click)="openFollowModal()"
+          class="group flex items-center justify-between p-3 transition-all duration-300 border-s-4 border-white dark:border-formBg-dark hover:border-mainText dark:hover:bg-dropdown-dark hover:shadow-md cursor-pointer"
+        >
+          <div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+            <i class="fa-solid fa-user-plus"></i>
+            <span
+              class="text-sm font-medium group-hover:text-mainText dark:group-hover:text-mainText-dark transition"
+            >
+              Follow
+            </span>
+          </div>
+        </a>
+      </div>
+
       <!-- ~Posts -->
       <app-post></app-post>
     </main>
