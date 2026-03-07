@@ -32,7 +32,7 @@
     "@tailwindcss/postcss": "^4.2.0",
     "flowbite": "^4.0.1",
     "ngx-spinner": "^21.0.0",
-    "ngx-toastr": "^20.0.5",
+    "ngx-toastr": "^18.0.0",
     "postcss": "^8.5.6",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.26.20",
