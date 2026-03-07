@@ -75,6 +75,8 @@ export class NavbarComponent implements AfterViewInit, OnInit {
 
         Swal.fire({
           title: 'Logged Out!',
+          background: this.bgColor,
+
           text: 'You have been successfully logged out.',
           icon: 'success',
           timer: 2000,
