@@ -1,0 +1,56 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'tailwindcss';
+@import 'flowbite/src/themes/default';
+@plugin "flowbite/plugin";
+@source "../node_modules/flowbite";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@import 'ngx-toastr/toastr';
+
+@theme {
+  /* Shared Colors */
+  --color-logoColor: #8b5cf6;
+
+  /* Light Mode */
+  --color-mainBg: #f9f9fb;
+  --color-mainText: #4b3b7b;
+  --color-formBg: #ffffff;
+  --color-hoverColor: #d6c1f0;
+  --color-hoverBtnColor: #5a4691;
+  --color-borderColor: #e1d9f5;
+  --color-dropdown: #f1eff8;
+  --gradientBg: #f4f0fa;
+  --gradientBg2: #ece6f8;
+
+  /* Dark Mode */
+  --color-mainBg-dark: #1a1625;
+  --color-mainText-dark: #6e55b2;
+  --color-formBg-dark: #2b2738;
+  --color-createComment-dark: #2e283c;
+  --color-hoverColor-dark: #5a45a0;
+  --color-borderColor-dark: #3a354a;
+  --color-dropdown-dark: #2f2940;
+
+  --gradientBg-dark: #221c33;
+  --gradientBg2-dark: #2b2142;
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 48px;
+}
+
+html {
+  font-size: 1rem;
+  /* overflow-x: hidden; */
+}
+
+body {
+  font-family: 'Cairo', sans-serif;
+  /* overflow-x: hidden; */
+}
+
+::selection {
+  color: white;
+  background-color: var(--color-mainText);
+}

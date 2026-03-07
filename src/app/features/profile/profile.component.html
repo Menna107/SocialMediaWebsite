@@ -1,0 +1,251 @@
+<section class="min-h-screen bg-mainBg dark:bg-mainBg-dark pt-22">
+  <div class="max-w-6xl mx-auto px-4 lg:px-8">
+    <div class="relative">
+      <!-- cover -->
+      <div class="cursor-pointer relative h-48 md:h-60 w-full overflow-hidden rounded-xl">
+        @if (coverPreview) {
+          <img [src]="coverPreview" class="h-full w-full object-cover" />
+        } @else if (!userData.cover) {
+          <div class="h-full w-full bg-gradient-to-r from-mainText to-logoColor"></div>
+        } @else {
+          <img
+            (click)="openImageModal(userData.cover)"
+            [src]="userData.cover"
+            alt="user cover"
+            class="h-full w-full object-cover"
+          />
+        }
+
+        <!-- delete + change -->
+        <div class="absolute top-4 right-4 flex gap-2">
+          <button
+            (click)="deleteCover()"
+            class="cursor-pointer px-3 py-1.5 text-xs rounded-lg bg-white/20 text-white border border-white/30 hover:bg-white/30 transition"
+          >
+            <i class="fa-solid fa-trash-can"></i> Delete
+          </button>
+
+          <button
+            (click)="photoInput.click()"
+            class="cursor-pointer px-3 py-1.5 text-xs rounded-lg bg-white/20 text-white border border-white/30 hover:bg-white/30 transition"
+          >
+            <i class="fa-solid fa-camera"></i> Change
+          </button>
+
+          <input
+            #photoInput
+            type="file"
+            accept="image/*"
+            (change)="prepareUploadedFile($event)"
+            class="hidden"
+          />
+        </div>
+
+        <!-- preview update / cancel -->
+        @if (coverPreview) {
+          <div class="absolute bottom-4 right-4 flex gap-2 z-10">
+            <button
+              type="button"
+              (click)="uploadCover()"
+              class="cursor-pointer px-3 py-1 text-xs bg-mainText text-white rounded"
+            >
+              {{ isLoading ? 'Updating...' : 'Update' }}
+            </button>
+            <button
+              type="button"
+              (click)="cancelPreview()"
+              class="cursor-pointer px-3 py-1 text-xs bg-gray-500 text-white rounded"
+            >
+              Cancel
+            </button>
+          </div>
+        }
+      </div>
+
+      <!-- profile header + links -->
+      <div class="relative px-4 md:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 -mt-12">
+          <div class="flex flex-col md:flex-row md:items-end gap-5">
+            <div class="relative w-fit">
+              <!-- user avatar -->
+              <img
+                (click)="openImageModal(userData.photo)"
+                [src]="avatarPreview ?? userData.photo"
+                alt="avatar image"
+                class="cursor-pointer w-32 h-32 rounded-full border-4 border-mainBg dark:border-mainBg-dark object-cover shadow-md"
+              />
+
+              <!-- Change Photo -->
+              <span
+                class="cursor-pointer absolute bottom-1 right-1 bg-blue-500 text-white rounded-full border-2 border-white flex items-center justify-center w-8 h-8"
+                (click)="avatarInput.click()"
+              >
+                <i class="fa-solid fa-camera text-[15px]"></i>
+              </span>
+
+              <!-- Avatar Modal Preview -->
+              @if (avatarPreviewModal) {
+                <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+                  <div
+                    class="bg-mainBg dark:bg-mainBg-dark rounded-xl max-w-md w-full p-6 shadow-lg flex flex-col gap-6"
+                  >
+                    <h2 class="text-lg font-semibold text-gray-900">Change profile photo</h2>
+
+                    <div
+                      class="w-1/2 mx-auto aspect-square rounded-lg overflow-hidden border border-gray-200"
+                    >
+                      <img
+                        [src]="avatarPreview"
+                        alt="Profile preview"
+                        class="w-full h-full object-cover rounded-lg"
+                      />
+                    </div>
+
+                    <div class="flex justify-end gap-4">
+                      <button
+                        (click)="confirmAvatarUpload()"
+                        class="flex-1 cursor-pointer text-white bg-mainText py-4 rounded-xl font-black text-sm shadow-xl shadow-mainText/20 hover:opacity-90 active:scale-95 transition-all"
+                      >
+                        Save photo
+                      </button>
+                      <button
+                        (click)="cancelAvatarPreview()"
+                        class="cursor-pointer px-8 py-4 rounded-xl font-bold text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-white/5 transition-all"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              }
+
+              <input
+                #avatarInput
+                type="file"
+                accept="image/*"
+                (change)="prepareAvatarFile($event)"
+                class="hidden"
+              />
+            </div>
+            <!-- user name + name -->
+            <div class="mb-2">
+              <h2 class="text-2xl font-bold text-mainText dark:text-mainText-dark">
+                {{ userData.name }}
+              </h2>
+              <p class="text-sm text-gray-500">{{ userData.username }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Page Links -->
+        <div class="mt-8 border-b border-borderColor dark:border-borderColor-dark">
+          <ul class="flex flex-col md:flex-row text-sm font-medium">
+            <li class="w-full md:w-auto">
+              <button
+                (click)="setActiveTab('details')"
+                class="flex items-center gap-2 p-4 border-b-2 transition-all duration-300 cursor-pointer w-full md:w-auto"
+                [class.text-mainText]="activeTab === 'details'"
+                [class.border-mainText]="activeTab === 'details'"
+                [class.dark:border-mainText-dark]="activeTab === 'details'"
+                [class.text-gray-500]="activeTab !== 'details'"
+                [class.border-transparent]="activeTab !== 'details'"
+              >
+                <i class="fa-solid fa-user"></i> My Details
+              </button>
+            </li>
+
+            <li class="w-full md:w-auto">
+              <button
+                (click)="setActiveTab('posts')"
+                class="flex items-center gap-2 p-4 border-b-2 transition-all duration-300 cursor-pointer w-full md:w-auto"
+                [class.text-mainText]="activeTab === 'posts'"
+                [class.border-mainText]="activeTab === 'posts'"
+                [class.dark:border-mainText-dark]="activeTab === 'posts'"
+                [class.text-gray-500]="activeTab !== 'posts'"
+                [class.border-transparent]="activeTab !== 'posts'"
+              >
+                <i class="fa-solid fa-file-lines"></i> My Posts
+              </button>
+            </li>
+
+            <li class="w-full md:w-auto">
+              <button
+                (click)="setActiveTab('savedPosts')"
+                (click)="getBookmarks(userData._id)"
+                class="flex items-center gap-2 p-4 border-b-2 transition-all duration-300 cursor-pointer w-full md:w-auto"
+                [class.text-mainText]="activeTab === 'savedPosts'"
+                [class.border-mainText]="activeTab === 'savedPosts'"
+                [class.dark:border-mainText-dark]="activeTab === 'savedPosts'"
+                [class.text-gray-500]="activeTab !== 'savedPosts'"
+                [class.border-transparent]="activeTab !== 'savedPosts'"
+              >
+                <i class="fa-solid fa-bookmark"></i> Saved Posts
+              </button>
+            </li>
+
+            <li class="w-full md:w-auto">
+              <button
+                (click)="setActiveTab('password')"
+                class="flex items-center gap-2 p-4 border-b-2 transition-all duration-300 cursor-pointer w-full md:w-auto"
+                [class.text-mainText]="activeTab === 'password'"
+                [class.border-mainText]="activeTab === 'password'"
+                [class.dark:border-mainText-dark]="activeTab === 'password'"
+                [class.text-gray-500]="activeTab !== 'password'"
+                [class.border-transparent]="activeTab !== 'password'"
+              >
+                <i class="fa-solid fa-lock"></i> Change Password
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Go to pages -->
+      <div class="mt-10 px-0 md:px-8 pb-20">
+        @if (activeTab === 'posts') {
+          <div class="animate-fade-in max-w-4xl mx-auto">
+            <app-post [source]="'profile'" [postList]="myPosts"></app-post>
+          </div>
+        }
+        @if (activeTab === 'savedPosts') {
+          <div class="animate-fade-in max-w-4xl mx-auto">
+            <app-post [postList]="bookmarksPosts" [source]="'bookmarks'"></app-post>
+          </div>
+        }
+
+        @if (activeTab === 'details') {
+          <div class="animate-fade-in">
+            <app-user-details></app-user-details>
+          </div>
+        }
+
+        @if (activeTab === 'password') {
+          <div id="change-password-tab" class="animate-fade-in">
+            <app-change-password></app-change-password>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ~Image Modal -->
+@if (selectedImage) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-7">
+    <div class="relative w-full h-full flex items-center justify-center">
+      <!-- Close button -->
+      <button
+        (click)="closeImageModal()"
+        class="absolute top-3 right-3 text-white cursor-pointer font-bold hover:text-gray-300 text-sm"
+      >
+        <i class="fa-solid fa-x"></i>
+      </button>
+
+      <!-- Fullscreen Image -->
+      <img
+        [src]="selectedImage"
+        class="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-xl"
+      />
+    </div>
+  </div>
+}

@@ -1,0 +1,234 @@
+<section class="min-h-screen flex items-center justify-center p-6">
+  <div
+    class="relative w-full max-w-6xl bg-formBg dark:bg-formBg-dark rounded-2xl shadow-2xl overflow-hidden grid md:grid-cols-2"
+  >
+    <!--Form (Left Side) -->
+    <div class="p-10 text-gray-600 dark:text-white flex flex-col justify-center h-full">
+      <h1 class="text-3xl font-semibold mb-2">Welcome Back!</h1>
+      <p class="text-gray-400 mb-6">
+        Don't have an account?
+        <a routerLink="/signup" class="text-mainText dark:text-mainText-dark hover:underline"
+          >Sign Up Now</a
+        >
+      </p>
+      <form [formGroup]="loginForm" (ngSubmit)="submitForm()" class="space-y-4">
+        <!-- Email or userName -->
+        <div class="relative">
+          <input
+            formControlName="login"
+            type="text"
+            id="loginInput"
+            placeholder=""
+            class="text-black dark:text-white block px-3 pb-3 pt-4 appearance-none peer w-full bg-borderColor dark:bg-borderColor-dark rounded-lg focus:outline-none focus:ring-2 focus:ring-mainText dark:focus:ring-mainText-dark placeholder:text-gray-500"
+          />
+          <label
+            for="loginInput"
+            class="absolute text-base text-gray-500 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-mainText dark:peer-focus:text-mainText-dark peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+            >Email or UserName</label
+          >
+
+          <!-- Alert for error Messages: -->
+          @if (loginForm.get('login')?.invalid && loginForm.get('login')?.touched) {
+            <div class="flex text-sm text-red-500 rounded-base" role="alert">
+              <div>
+                <ul class="mt-2 list-disc list-outside px-6">
+                  @if (loginForm.get('login')?.hasError('required')) {
+                    <li>Email or username is required!</li>
+                  } @else if (loginForm.get('login')?.hasError('minlength')) {
+                    <li>must be more than 3 letters.</li>
+                  }
+                </ul>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Password -->
+        <div class="relative">
+          <input
+            #password
+            formControlName="password"
+            type="password"
+            id="passwordInput"
+            placeholder=""
+            class="text-black dark:text-white block px-3 pb-3 pt-4 appearance-none peer w-full bg-borderColor dark:bg-borderColor-dark rounded-lg focus:outline-none focus:ring-2 focus:ring-mainText dark:focus:ring-mainText-dark placeholder:text-gray-500"
+          />
+
+          <label
+            for="passwordInput"
+            class="absolute text-base text-gray-500 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-mainText dark:peer-focus:text-mainText-dark peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+            >Password</label
+          >
+
+          <span (click)="showPassword(password)" class="absolute top-4 cursor-pointer end-4"
+            ><i
+              [class]="password.type === 'password' ? 'fa-eye-slash' : 'fa-eye'"
+              class="fa-solid"
+            ></i
+          ></span>
+
+          <!-- Alert for error Messages: -->
+          @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+            <div class="mt-2 flex text-sm text-red-500 rounded-base" role="alert">
+              <div>
+                <ul class="mt-0 list-disc list-outside px-6">
+                  @if (loginForm.get('password')?.hasError('required')) {
+                    <li>Password is required!</li>
+                  }
+                  @if (loginForm.get('password')?.hasError('pattern')) {
+                    <li>
+                      Password must have uppercase, lowercase letters and special character and a
+                      number.
+                    </li>
+                  }
+                </ul>
+              </div>
+            </div>
+          }
+        </div>
+
+        <button
+          class="cursor-pointer text-white w-full bg-mainText dark:bg-mainText-dark py-3 rounded-lg hover:bg-hoverBtnColor dark:hover:bg-hoverColor-dark transition-all duration-300 shadow-lg hover:shadow-xl"
+        >
+          Login
+        </button>
+
+        <a
+          routerLink="/forget"
+          class="text-mainText dark:text-mainText-dark hover:underline block text-center"
+          >Forgot Password?</a
+        >
+      </form>
+    </div>
+
+    <!-- Carousel Part (Right Side) -->
+    <div id="default-carousel" class="relative md:block" data-carousel="slide">
+      <div class="relative h-full min-h-[600px] overflow-hidden">
+        <!-- Item 1 -->
+        <div class="duration-700 ease-in-out" data-carousel-item="active">
+          <img
+            src="/assets/images/login2.jpg"
+            class="absolute inset-0 w-full h-full object-cover"
+            alt=""
+          />
+
+          <!-- Overlay -->
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-formBg-dark/90 via-formBg-dark/50 to-transparent"
+          ></div>
+
+          <!-- Text -->
+          <div class="absolute bottom-10 left-10 text-white max-w-sm">
+            <h2 class="text-3xl font-semibold leading-snug">
+              Stay Social, <br />
+              Anywhere, Anytime
+            </h2>
+            <p class="text-gray-300 mt-3 text-sm">
+              Chat, share, and engage with friends and communities wherever you go.
+            </p>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img
+            src="/assets/images/login1.jpg"
+            class="absolute inset-0 w-full h-full object-cover"
+            alt=""
+          />
+
+          <!-- Overlay -->
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-formBg-dark/90 via-formBg-dark/50 to-transparent"
+          ></div>
+
+          <!-- Text -->
+          <div class="absolute bottom-10 left-10 text-white max-w-sm">
+            <h2 class="text-3xl font-semibold leading-snug">
+              Connecting Cultures, <br />
+              One Hand at a Time
+            </h2>
+            <p class="text-gray-300 mt-3 text-sm">
+              Celebrate diversity and build meaningful connections across the globe.
+            </p>
+          </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img
+            src="/assets/images/signUp4.jpg"
+            class="absolute inset-0 w-full h-full object-cover"
+            alt=""
+          />
+
+          <!-- Overlay -->
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-formBg-dark/90 via-formBg-dark/50 to-transparent"
+          ></div>
+
+          <!-- Text -->
+          <div class="absolute bottom-10 left-10 text-white max-w-sm">
+            <h2 class="text-3xl font-semibold leading-snug">
+              Discover Trends,<br />
+              Join the Conversation
+            </h2>
+            <p class="text-gray-300 mt-3 text-sm">
+              Explore new ideas, follow creators, and be part of a growing community.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slider indicators -->
+      <div
+        class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse"
+      >
+        <button
+          type="button"
+          class="dot w-6 h-1 bg-white rounded"
+          aria-current="true"
+          aria-label="Slide 1"
+          data-carousel-slide-to="0"
+        ></button>
+        <button
+          type="button"
+          class="dot w-6 h-1 bg-white/40 rounded"
+          aria-current="false"
+          aria-label="Slide 2"
+          data-carousel-slide-to="1"
+        ></button>
+        <button
+          type="button"
+          class="dot w-6 h-1 bg-white/40 rounded"
+          aria-current="false"
+          aria-label="Slide 3"
+          data-carousel-slide-to="2"
+        ></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auth Switch Buttons -->
+  <div class="absolute top-6 left-1/2 -translate-x-1/2 z-40 hidden md:flex">
+    <div
+      class="flex bg-formBg/90 dark:bg-formBg-dark/90 backdrop-blur-md p-1 rounded-full shadow-xl border border-borderColor dark:border-borderColor-dark"
+    >
+      <a
+        routerLink="/login"
+        routerLinkActive="bg-mainText text-white shadow-md"
+        class="text-gray-500 hover:text-mainText hover:bg-dropdown dark:hover:text-white dark:hover:bg-dropdown-dark shadow-md px-6 py-2 text-sm font-medium rounded-full transition-all duration-300"
+      >
+        Login
+      </a>
+
+      <a
+        routerLink="/signup"
+        routerLinkActive="bg-mainText text-white shadow-md"
+        class="text-gray-500 hover:text-mainText hover:bg-dropdown dark:hover:text-white dark:hover:bg-dropdown-dark px-6 py-2 text-sm font-medium rounded-full transition-all duration-300"
+      >
+        Sign Up
+      </a>
+    </div>
+  </div>
+</section>

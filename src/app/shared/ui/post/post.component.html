@@ -1,0 +1,641 @@
+@for (post of postList; track post._id) {
+  <div
+    class="mt-4 bg-formBg dark:bg-formBg-dark border border-borderColor dark:border-borderColor-dark rounded-2xl shadow-lg p-5 space-y-4"
+  >
+    <!-- User Info -->
+    <div class="flex items-start justify-between">
+      <div class="flex flex-col">
+        <div class="flex items-center gap-3">
+          <img
+            [alt]="post.user.name || 'User Avatar'"
+            [src]="post.user.photo || '/assets/images/user.png'"
+            class="w-11 h-11 rounded-full object-cover"
+          />
+
+          <div class="flex flex-col">
+            <h3
+              [routerLink]="['/user', post.user._id]"
+              class="cursor-pointer font-semibold text-mainText dark:text-mainText-dark hover:underline"
+            >
+              {{ post.user.name }}
+            </h3>
+
+            <div class="mt-1 flex flex-col items-start gap-2">
+              <!-- Row 1: Date + Privacy -->
+              <div class="flex items-center gap-3">
+                <span class="text-xs text-gray-400">
+                  {{ post.createdAt | date }}
+                </span>
+
+                <!-- Privacy Select -->
+                <div class="relative w-fit">
+                  @if (post.privacy === 'public') {
+                    <i
+                      class="fa-solid fa-earth-americas absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none"
+                    ></i>
+                  } @else if (post.privacy === 'following') {
+                    <i
+                      class="fa-solid fa-user-group absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none"
+                    ></i>
+                  } @else if (post.privacy === 'only_me') {
+                    <i
+                      class="fa-solid fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none"
+                    ></i>
+                  }
+
+                  <select
+                    [disabled]="post.user._id !== userData._id"
+                    [value]="post.privacy"
+                    (change)="onChangePrivacy(post, $event)"
+                    class="cursor-pointer disabled:cursor-not-allowed text-xs bg-gray-100 dark:bg-borderColor-dark text-gray-600 dark:text-gray-300 pl-8 pr-5 py-1 rounded-lg outline-none focus:ring-2 focus:ring-mainText dark:focus:ring-mainText-dark transition appearance-none"
+                  >
+                    <option value="public">Public</option>
+                    <option value="following">Followers</option>
+                    <option value="only_me">Only me</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        @if (post.bookmarked) {
+          <span
+            class="mt-2 w-fit px-3 py-1 text-[11px] font-semibold rounded-full bg-gradient-to-r from-purple-500/10 to-indigo-500/10 text-purple-600 dark:text-purple-400 border border-purple-400/30 flex items-center gap-1"
+          >
+            <i class="me-1 fa-solid fa-bookmark text-[10px]"></i>
+            Saved
+          </span>
+        }
+      </div>
+
+      <!-- Options Menu -->
+      <div class="relative group">
+        <button
+          [attr.data-dropdown-toggle]="'dropdown-' + post.id"
+          [id]="'dropdownButton-' + post.id"
+          class="text-heading bg-formBg dark:bg-formBg-dark box-border border border-transparent hover:bg-neutral-secondary-medium dark:hover:bg-formBg-dark dark:hover:border-borderColor-dark cursor-pointer focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded-base text-sm p-2 focus:outline-none"
+          type="button"
+        >
+          <svg
+            class="w-6 h-6"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-width="3"
+              d="M6 12h.01m6 0h.01m5.99 0h.01"
+            />
+          </svg>
+        </button>
+
+        <!-- Dropdown menu -->
+        <div
+          [id]="'dropdown-' + post.id"
+          class="z-50 hidden min-w-45 bg-white dark:bg-formBg-dark border border-gray-200 dark:border-neutral-700 rounded-xl shadow-xl overflow-hidden"
+        >
+          <ul class="py-2 text-sm font-medium text-gray-700 dark:text-gray-200">
+            <!-- View -->
+            <li>
+              <button
+                (click)="openModal(post)"
+                class="cursor-pointer w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-100 dark:hover:bg-neutral-700 transition duration-150"
+              >
+                <i class="fa-solid fa-expand text-gray-500 text-sm"></i>
+                <span>View Post</span>
+              </button>
+            </li>
+
+            <!-- Save -->
+            <li>
+              <button
+                (click)="savePost(post._id, post.body)"
+                class="cursor-pointer w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-100 dark:hover:bg-neutral-700 transition duration-150"
+              >
+                <!-- post saved -->
+                @if (post.bookmarked) {
+                  <i class="fa-regular fa-bookmark"></i>
+                  <span>Unsaved Post</span>
+                } @else {
+                  <i class="fa-solid fa-bookmark text-gray-500 text-sm"></i>
+                  <span>Save Post</span>
+                }
+              </button>
+            </li>
+
+            <!-- Edit and Delete Post -->
+            @if (post.user._id === userData._id) {
+              <!-- Edit -->
+              <li>
+                <button
+                  (click)="openModalEdit(post)"
+                  class="cursor-pointer w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-100 dark:hover:bg-neutral-700 transition duration-150"
+                >
+                  <i class="fa-solid fa-pen-to-square text-gray-500 text-sm"></i>
+                  <span>Edit Post</span>
+                </button>
+              </li>
+
+              <!-- Divider -->
+              <div class="my-1 border-t border-gray-200 dark:border-neutral-700"></div>
+
+              <!-- Delete -->
+              <li>
+                <button
+                  (click)="deletePostItem(post._id)"
+                  class="cursor-pointer w-full flex items-center gap-3 px-4 py-2.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition duration-150"
+                >
+                  <i class="fa-solid fa-trash-can text-sm"></i>
+                  <span>Delete Post</span>
+                </button>
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <p class="text-gray-600 dark:text-gray-300 break-words">{{ post.body }}</p>
+
+    <!-- Image -->
+    @if (post.image) {
+      <img
+        [alt]="post.body"
+        [src]="post.image"
+        (click)="openImageModal(post.image)"
+        class="cursor-pointer rounded-xl w-full object-cover max-h-96 mt-2"
+      />
+    }
+
+    <!-- Shared Post Preview -->
+    @if (post.sharedPost) {
+      <div
+        class="border border-borderColor dark:border-borderColor-dark rounded-xl p-4 mt-4 bg-gray-50 dark:bg-formBg-dark"
+      >
+        <div class="flex items-center justify-between gap-3 mb-2">
+          <div class="flex items-center gap-3 mb-2">
+            <img
+              [src]="post.sharedPost.user.photo || '/assets/images/user.png'"
+              class="w-10 h-10 rounded-full object-cover"
+            />
+            <div>
+              <h4
+                [routerLink]="['/user', post.sharedPost.user._id]"
+                class="font-semibold text-sm dark:text-white hover:underline"
+              >
+                {{ post.sharedPost.user.name }}
+              </h4>
+              <span class="text-xs text-gray-400">
+                {{ post.sharedPost.createdAt | date }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Go to Original Post Button -->
+          <button
+            (click)="openModal(post.sharedPost)"
+            class="cursor-pointer text-sm px-3 py-1 bg-mainText text-white rounded-lg hover:opacity-90 transition"
+          >
+            Original Post
+          </button>
+        </div>
+
+        <p class="text-sm text-gray-600 dark:text-gray-300 mb-2 break-words">
+          {{ post.sharedPost.body }}
+        </p>
+
+        @if (post.sharedPost.image) {
+          <img
+            (click)="openImageModal(post.sharedPost.image)"
+            [src]="post.sharedPost.image"
+            class="cursor-pointer rounded-lg max-h-60 w-full object-cover mb-2"
+          />
+        }
+      </div>
+    }
+
+    <!-- Stats -->
+    <div class="flex justify-between text-sm text-gray-500 pt-2 px-3">
+      <div
+        (click)="openLikesModal(post)"
+        class="cursor-pointer hover:text-mainText flex items-center gap-1"
+      >
+        <i class="fa-regular fa-thumbs-up"></i>
+        <span>{{ post.likesCount }}</span>
+      </div>
+
+      <div class="flex gap-3">
+        <span><i class="fa-solid fa-comment"></i> {{ post.commentsCount }} comments</span>
+        <span><i class="fa-solid fa-retweet"></i> {{ post.sharesCount }} shares</span>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div
+      class="flex justify-between p-3 gap-2 border-t border-borderColor dark:border-borderColor-dark"
+    >
+      <button
+        (click)="likeUnlikePost(post)"
+        [class.text-purple-600]="post.isLiked"
+        [class.dark:text-mainText-dark]="post.isLiked"
+        [class.bg-purple-100]="post.isLiked"
+        [class.dark:bg-borderColor-dark]="post.isLiked"
+        class="flex flex-1 cursor-pointer justify-center items-center gap-2 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-borderColor-dark hover:text-mainText dark:hover:text-mainText-dark transition duration-200"
+      >
+        <i
+          class="fa-thumbs-up"
+          [class.fa-regular]="!post.isLiked"
+          [class.fa-solid]="post.isLiked"
+        ></i>
+        Like
+      </button>
+
+      <button
+        #el
+        class="flex flex-1 cursor-pointer justify-center items-center gap-2 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-borderColor-dark hover:text-mainText dark:hover:text-mainText-dark transition duration-200"
+      >
+        <i class="fa-regular fa-comment"></i> Comment
+      </button>
+
+      <button
+        (click)="openShareModal(post)"
+        class="flex flex-1 cursor-pointer justify-center items-center gap-2 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-borderColor-dark hover:text-mainText dark:hover:text-mainText-dark transition duration-200"
+      >
+        <i class="fa-solid fa-share-nodes"></i> Share
+      </button>
+    </div>
+
+    <!-- Post Comment -->
+    @defer (on interaction(el)) {
+      <app-post-comments
+        (commentAdded)="post.commentsCount = (post.commentsCount || 0) + 1"
+        (commentDeleted)="post.commentsCount = (post.commentsCount || 0) - 1"
+        [postId]="post._id"
+      ></app-post-comments>
+    }
+  </div>
+}
+
+<!-- ~Share Post Modal -->
+@if (selectedPostToShare) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div
+      class="bg-formBg dark:bg-formBg-dark rounded-2xl w-11/12 md:w-2/3 lg:w-1/2 max-h-[90vh] overflow-auto p-6 relative shadow-xl"
+    >
+      <!-- Close -->
+      <button
+        (click)="closeShareModal()"
+        class="cursor-pointer absolute top-4 right-4 text-gray-500 hover:text-red-500"
+      >
+        <i class="fa-solid fa-x"></i>
+      </button>
+
+      <!-- Title -->
+      <h2 class="text-xl font-semibold mb-4 text-mainText dark:text-mainText-dark">Share Post</h2>
+
+      <!-- Textarea -->
+      <textarea
+        [(ngModel)]="shareComment"
+        rows="3"
+        placeholder="Say something about this post..."
+        class="dark:text-white w-full p-3 rounded-xl border border-borderColor dark:border-borderColor-dark bg-gray-50 dark:bg-borderColor-dark outline-none focus:ring-2 focus:ring-mainText resize-none mb-4"
+      ></textarea>
+
+      <!-- Original Post Preview -->
+      <div
+        class="border border-borderColor dark:border-borderColor-dark rounded-xl p-4 mb-4 bg-gray-50 dark:bg-mainBg-dark"
+      >
+        <div class="flex items-center gap-3 mb-2">
+          <img [src]="selectedPostToShare.user.photo" class="w-10 h-10 rounded-full object-cover" />
+          <div>
+            <h4 class="font-semibold text-sm dark:text-white">
+              {{ selectedPostToShare.user.name }}
+            </h4>
+            <span class="text-xs text-gray-400">
+              {{ selectedPostToShare.createdAt | date }}
+            </span>
+          </div>
+        </div>
+
+        <p class="text-sm text-gray-600 dark:text-gray-300">
+          {{ selectedPostToShare.body }}
+        </p>
+
+        @if (selectedPostToShare.image) {
+          <img
+            [src]="selectedPostToShare.image"
+            class="mt-2 rounded-lg max-h-60 w-full object-cover"
+          />
+        }
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex justify-end gap-3">
+        <button
+          (click)="closeShareModal()"
+          class="cursor-pointer px-4 py-2 rounded-lg dark:text-white bg-gray-200 dark:bg-borderColor-dark hover:opacity-80"
+        >
+          Cancel
+        </button>
+
+        <button
+          (click)="confirmShare()"
+          [disabled]="sharingLoading"
+          class="cursor-pointer px-6 py-2 rounded-lg bg-mainText text-white hover:opacity-90 disabled:opacity-50"
+        >
+          {{ sharingLoading ? 'Sharing...' : 'Share' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- ~View Edit Post Modal -->
+@if (selectedPostEdit) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+    <div
+      class="bg-formBg dark:bg-formBg-dark rounded-2xl w-11/12 md:w-2/3 lg:w-1/2 max-h-[90vh] overflow-auto p-8 relative shadow-xl"
+    >
+      <!-- Close button -->
+      <button
+        (click)="closeModalEdit()"
+        class="cursor-pointer absolute top-3 right-3 text-gray-500 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 text-md"
+      >
+        <i class="fa-solid fa-x"></i>
+      </button>
+
+      <div>
+        <app-create-post
+          [postToEdit]="selectedPostEdit"
+          (closeModalEvent)="closeModalEdit()"
+          (refreshPostsEvent)="getAllPosts()"
+        ></app-create-post>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- ~View Post Modal -->
+@if (selectedPost) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+    <div
+      class="bg-formBg dark:bg-formBg-dark rounded-2xl w-11/12 md:w-2/3 lg:w-1/2 max-h-[90vh] overflow-auto p-6 relative shadow-xl"
+    >
+      <!-- Close button -->
+      <button
+        (click)="closeModal()"
+        class="cursor-pointer absolute top-8 right-5 text-gray-500 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 text-md"
+      >
+        <i class="fa-solid fa-x"></i>
+      </button>
+
+      <!-- Post Content -->
+      <div>
+        <!-- User Info -->
+        <div class="flex items-center gap-3 mb-4">
+          <img
+            title="user avatar"
+            [src]="selectedPost.user.photo"
+            class="w-12 h-12 rounded-full object-cover"
+          />
+          <div>
+            <h3
+              [routerLink]="['/user', selectedPost.user._id]"
+              class="font-semibold text-mainText dark:text-mainText-dark hover:underline"
+            >
+              {{ selectedPost.user.name }}
+            </h3>
+            <span class="text-xs text-gray-400">{{ selectedPost.createdAt | date }}</span>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <p class="text-gray-600 dark:text-gray-300 mb-4">{{ selectedPost.body }}</p>
+
+        <!-- Image -->
+        @if (selectedPost.image) {
+          <img
+            [alt]="`${selectedPost.user}image`"
+            [src]="selectedPost.image"
+            (click)="openImageModal(selectedPost.image)"
+            class="cursor-pointer w-full object-cover rounded-xl max-h-96 mb-4"
+          />
+        }
+
+        <!-- Shared Post Preview -->
+        @if (selectedPost.sharedPost) {
+          <div
+            class="border border-borderColor dark:border-borderColor-dark rounded-xl p-4 mt-4 bg-gray-50 dark:bg-formBg-dark"
+          >
+            <div class="flex items-center justify-between gap-3 mb-2">
+              <div class="flex items-center gap-3 mb-2">
+                <img
+                  [src]="selectedPost.sharedPost.user.photo || '/assets/images/user.png'"
+                  class="w-10 h-10 rounded-full object-cover"
+                />
+                <div>
+                  <h4
+                    [routerLink]="['/user', selectedPost.sharedPost.user._id]"
+                    class="font-semibold text-sm dark:text-white hover:underline"
+                  >
+                    {{ selectedPost.sharedPost.user.name }}
+                  </h4>
+                  <span class="text-xs text-gray-400">
+                    {{ selectedPost.sharedPost.createdAt | date }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Go to Original Post Button -->
+              <button
+                (click)="openModal(selectedPost.sharedPost)"
+                class="cursor-pointer text-sm px-3 py-1 bg-mainText text-white rounded-lg hover:opacity-90 transition"
+              >
+                Original Post
+              </button>
+            </div>
+
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-2 break-words">
+              {{ selectedPost.sharedPost.body }}
+            </p>
+
+            @if (selectedPost.sharedPost.image) {
+              <img
+                (click)="openImageModal(selectedPost.sharedPost.image)"
+                [src]="selectedPost.sharedPost.image"
+                class="cursor-pointer rounded-lg max-h-60 w-full object-cover mb-2"
+              />
+            }
+          </div>
+        }
+
+        <!-- Stats -->
+        <div class="mb-3 flex justify-between text-sm text-gray-500 pt-2 px-3">
+          <div
+            (click)="openLikesModal(selectedPost)"
+            class="cursor-pointer hover:text-mainText flex items-center gap-1"
+          >
+            <i class="fa-regular fa-thumbs-up"></i>
+            <span>{{ selectedPost.likesCount }}</span>
+          </div>
+
+          <div class="flex gap-3">
+            <span class="hover:text-mainText cursor-pointer"
+              ><i class="fa-solid fa-comment"></i> {{ selectedPost.commentsCount }} comments</span
+            >
+            <span class="hover:text-mainText cursor-pointer"
+              ><i class="fa-solid fa-retweet"></i> {{ selectedPost.sharesCount }} shares</span
+            >
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div
+          class="flex justify-between p-3 border-t border-borderColor dark:border-borderColor-dark"
+        >
+          <button
+            (click)="likeUnlikePost(selectedPost)"
+            [class.text-purple-600]="selectedPost.isLiked"
+            [class.dark:text-mainText-dark]="selectedPost.isLiked"
+            [class.bg-purple-100]="selectedPost.isLiked"
+            [class.dark:bg-borderColor-dark]="selectedPost.isLiked"
+            class="flex flex-1 cursor-pointer justify-center items-center gap-2 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-borderColor-dark hover:text-mainText dark:hover:text-mainText-dark transition duration-200"
+          >
+            <i
+              class="fa-thumbs-up"
+              [class.fa-regular]="!selectedPost.isLiked"
+              [class.fa-solid]="selectedPost.isLiked"
+            ></i>
+            Like
+          </button>
+
+          <button
+            #el
+            class="flex flex-1 cursor-pointer justify-center items-center gap-2 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-borderColor-dark hover:text-mainText dark:hover:text-mainText-dark transition duration-200"
+          >
+            <i class="fa-regular fa-comment"></i> Comment
+          </button>
+
+          <button
+            class="flex flex-1 cursor-pointer justify-center items-center gap-2 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-borderColor-dark hover:text-mainText dark:hover:text-mainText-dark transition duration-200"
+          >
+            <i class="fa-solid fa-share-nodes"></i> Share
+          </button>
+        </div>
+      </div>
+      <!-- Post Comment -->
+      @defer (on interaction(el)) {
+        <app-post-comments [postId]="selectedPost._id"></app-post-comments>
+      }
+    </div>
+  </div>
+}
+
+<!-- ~Image Modal -->
+@if (selectedImage) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-7">
+    <div class="relative w-full h-full flex items-center justify-center">
+      <!-- Close button -->
+      <button
+        (click)="closeImageModal()"
+        class="absolute top-3 right-3 text-white cursor-pointer font-bold hover:text-gray-300 text-sm"
+      >
+        <i class="fa-solid fa-x"></i>
+      </button>
+
+      <!-- Fullscreen Image -->
+      <img
+        [src]="selectedImage"
+        class="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-xl"
+      />
+    </div>
+  </div>
+}
+
+<!-- ~Modal for people who reacted -->
+@if (showModal) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div
+      class="w-90 md:w-125 max-h-[80vh] h-125 bg-mainBg dark:bg-mainBg-dark rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+    >
+      <!-- Header -->
+      <div
+        class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700"
+      >
+        <div class="flex items-center gap-2 font-semibold text-lg text-gray-900 dark:text-white">
+          <i class="fa-regular fa-user"></i>
+          <span>People who reacted</span>
+        </div>
+
+        <button
+          (click)="showModal = false"
+          class="cursor-pointer text-gray-500 hover:text-gray-800 dark:hover:text-white transition"
+        >
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Users List -->
+      <div class="overflow-y-auto flex-1 p-2">
+        <!-- Loading -->
+        @if (loadingLikes) {
+          <div class="flex flex-col items-center justify-center h-full gap-2">
+            <i
+              class="fa-solid fa-spinner animate-spin text-2xl text-gray-500 dark:text-gray-300"
+            ></i>
+            <span class="text-gray-500 dark:text-gray-300">Loading...</span>
+          </div>
+        }
+
+        <!-- No users -->
+        @if (!loadingLikes && (!postLikes || postLikes.length === 0)) {
+          <div class="flex flex-col items-center justify-center h-full gap-2">
+            <i class="fa-regular fa-face-frown text-3xl text-gray-400 dark:text-gray-500"></i>
+            <span class="text-gray-500 dark:text-gray-300">No reactions yet</span>
+          </div>
+        }
+
+        <!-- Users -->
+        @if (!loadingLikes && postLikes && postLikes.length > 0) {
+          @for (user of postLikes; track user?._id) {
+            <div
+              class="flex items-center justify-between gap-3 px-5 py-3 hover:bg-gray-100 dark:hover:bg-borderColor-dark transition cursor-pointer rounded-lg"
+            >
+              <!-- User info -->
+              <div class="flex items-center gap-3">
+                <img
+                  [src]="user?.photo || '/assets/images/user.png'"
+                  class="w-11 h-11 rounded-full object-cover"
+                />
+                <div class="flex flex-col">
+                  <span class="font-semibold text-gray-900 dark:text-white">{{ user?.name }}</span>
+                  <span class="text-gray-500 text-sm">{{ user?.username }}</span>
+                  <span class="text-gray-400 text-xs"
+                    >{{ user?.followersCount || 0 }} followers</span
+                  >
+                </div>
+              </div>
+
+              @if (user._id !== userData._id) {
+                <!-- Follow button -->
+                <button
+                  [class.bg-mainText]="!user.isFollowing"
+                  [class.scale1.02]="user.isFollowing"
+                  class="cursor-pointer bg-mainText dark:bg-mainText-dark px-3 py-1 rounded-lg text-white text-sm hover:opacity-90 transition"
+                >
+                  {{ user.isFollowing ? 'Following' : 'Follow' }}
+                </button>
+              }
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </div>
+}

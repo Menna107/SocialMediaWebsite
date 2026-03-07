@@ -1,0 +1,291 @@
+<nav
+  class="bg-mainBg dark:bg-mainBg-dark fixed w-full z-20 top-0 start-0 border border-gray-200 dark:border-b dark:border-dark"
+>
+  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    <a routerLink="/home" class="flex items-center gap-2 group transition">
+      <!-- Logo -->
+      <img
+        src="/favicon.png"
+        class="w-11 h-11 object-contain group-hover:scale-110 transition duration-300"
+        alt="SociaX Logo"
+      />
+
+      <!-- Brand Name -->
+      <span class="text-2xl font-light text-mainText leading-none">
+        <span class="text-4xl font-bold text-logoColor leading-none">S</span>ociaX
+      </span>
+    </a>
+
+    <!-- Profile + Theme Mode -->
+    <div class="flex items-center md:order-2 space-x-3 rtl:space-x-reverse">
+      <!-- Theme Toggle Button -->
+      <button
+        (click)="toggleTheme()"
+        class="cursor-pointer w-10 h-10 flex items-center justify-center rounded-full bg-formBg dark:bg-formBg-dark border border-borderColor dark:border-borderColor-dark shadow-md hover:scale-105 transition-transform duration-300"
+        aria-label="Toggle Theme"
+      >
+        @if (isDark) {
+          <i title="Dark Mode" class="fas fa-moon text-mainText text-lg"></i>
+        } @else {
+          <i title="Light Mode" class="fas fa-sun text-mainText text-lg"></i>
+        }
+      </button>
+
+      <!-- User Menu Button +  Mobile Links Icon-->
+      <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+        <button
+          id="dropdownInformationButton"
+          data-dropdown-toggle="dropdownInformation"
+          type="button"
+          class="w-10 h-10 rounded-full overflow-hidden border border-borderColor dark:border-borderColor-dark shadow-md focus:ring-2 focus:ring-mainText dark:focus:ring-mainText-dark"
+        >
+          <img [src]="userData.photo" alt="user Avatar" class="w-full h-full object-cover" />
+        </button>
+
+        <!-- Dropdown menu -->
+        <div class="relative">
+          <div
+            id="dropdownInformation"
+            class="absolute top-full right-0 z-10 hidden bg-mainBg border border-borderColor dark:bg-mainBg-dark dark:border-borderColor-dark rounded-base shadow-lg w-72 mt-1"
+          >
+            <div class="p-2">
+              <div
+                routerLink="/profile"
+                class="cursor-pointer flex items-center px-2.5 p-2 space-x-1.5 text-sm bg-mainBg dark:bg-mainBg-dark rounded"
+              >
+                <img class="w-8 h-8 rounded-full" [src]="userData.photo" alt="Rounded avatar" />
+                <div class="text-sm">
+                  <div class="font-medium text-heading">{{ userData.name }}</div>
+                  <div class="truncate text-body">{{ userData.email }}</div>
+                </div>
+              </div>
+            </div>
+            <ul
+              class="px-2 pb-2 text-sm text-body font-medium"
+              aria-labelledby="dropdownInformationButton"
+            >
+              <!-- account -->
+              <li>
+                <a
+                  routerLink="/profile"
+                  class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
+                >
+                  <svg
+                    class="w-4 h-4 me-1.5"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-width="2"
+                      d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
+                  </svg>
+                  Account
+                </a>
+              </li>
+
+              <!-- settings -->
+              <li>
+                <a
+                  [routerLink]="['/profile']"
+                  [fragment]="'change-password-tab'"
+                  class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
+                >
+                  <svg
+                    class="w-4 h-4 me-1.5"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-width="2"
+                      d="M20 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6h-2m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4"
+                    />
+                  </svg>
+                  Settings
+                </a>
+              </li>
+
+              <!-- notification -->
+              <li>
+                <a
+                  routerLink="/notification"
+                  class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
+                >
+                  <svg
+                    class="w-4 h-4 me-1.5"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 5.365V3m0 2.365a5.338 5.338 0 0 1 5.133 5.368v1.8c0 2.386 1.867 2.982 1.867 4.175 0 .593 0 1.292-.538 1.292H5.538C5 18 5 17.301 5 16.708c0-1.193 1.867-1.789 1.867-4.175v-1.8A5.338 5.338 0 0 1 12 5.365ZM8.733 18c.094.852.306 1.54.944 2.112a3.48 3.48 0 0 0 4.646 0c.638-.572 1.236-1.26 1.33-2.112h-6.92Z"
+                    />
+                  </svg>
+                  Notifications
+                </a>
+              </li>
+
+              <!-- Dark Mode -->
+              <li
+                class="flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded mb-1.5"
+              >
+                <a class="cursor-pointer inline-flex items-center">
+                  <svg
+                    class="w-4 h-4 me-1.5"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 21a9 9 0 0 1-.5-17.986V3c-.354.966-.5 1.911-.5 3a9 9 0 0 0 9 9c.239 0 .254.018.488 0A9.004 9.004 0 0 1 12 21Z"
+                    />
+                  </svg>
+                  Dark mode
+                </a>
+                <label class="inline-flex items-center cursor-pointer ms-auto">
+                  <input
+                    [checked]="isDark"
+                    (click)="toggleTheme()"
+                    type="checkbox"
+                    value=""
+                    class="sr-only peer"
+                  />
+                  <div
+                    class="relative w-9 h-5 bg-neutral-quaternary peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-brand-soft dark:peer-focus:ring-brand-soft rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand"
+                  ></div>
+                  <span class="ms-3 text-sm font-medium text-heading sr-only">Toggle me</span>
+                </label>
+              </li>
+
+              <!-- log out -->
+              <li>
+                <a
+                  (click)="logOut()"
+                  class="cursor-pointer inline-flex items-center w-full p-2 text-fg-danger hover:bg-neutral-tertiary-medium rounded"
+                >
+                  <svg
+                    class="w-4 h-4 me-1.5"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2"
+                    />
+                  </svg>
+                  Sign out
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Mobile Links Icon -->
+        <button
+          type="button"
+          class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-body rounded-base md:hidden hover:bg-neutral-secondary-soft hover:text-heading focus:outline-none focus:ring-2 focus:ring-neutral-tertiary"
+          aria-controls="navbar-user"
+          [attr.aria-expanded]="isMenuOpen"
+          (click)="toggleMenu()"
+        >
+          <span class="sr-only">Open main menu</span>
+          <svg
+            class="w-6 h-6"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-width="2"
+              d="M5 7h14M5 12h14M5 17h14"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Website Pages Links -->
+    <div
+      [class.hidden]="!isMenuOpen"
+      id="navbar-user"
+      class="md:flex transition flex-col md:flex-row items-center justify-center absolute left-1/2 -translate-x-1/2 w-full md:w-auto mt-24 md:mt-0 z-50"
+    >
+      <!-- Close button for mobile -->
+      <button
+        (click)="closeMenu()"
+        class="md:hidden cursor-pointer absolute top-7 right-3 text-gray-500 dark:text-gray-200 p-2 rounded-full z-50"
+        aria-label="Close menu"
+      >
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+
+      <div
+        class="pt-15 relative flex flex-col md:flex-row bg-formBg/95 dark:bg-formBg-dark/95 backdrop-blur-md p-4 md:p-1 rounded-lg md:rounded-full shadow-lg border border-borderColor dark:border-borderColor-dark space-y-3 md:space-y-0 md:space-x-2 w-full md:w-auto"
+      >
+        <a
+          routerLink="/home"
+          routerLinkActive="bg-mainText text-white shadow-md"
+          class="px-6 py-2 text-sm font-medium rounded-full transition-all duration-300 text-gray-500 hover:text-mainText hover:bg-dropdown dark:hover:text-white dark:hover:bg-dropdown-dark text-center w-full md:w-auto"
+        >
+          <i class="fa-solid fa-house me-1"></i>
+          Feed
+        </a>
+
+        <a
+          routerLink="/profile"
+          routerLinkActive="bg-mainText text-white shadow-md"
+          class="px-6 py-2 text-sm font-medium rounded-full transition-all duration-300 text-gray-500 hover:text-mainText hover:bg-dropdown dark:hover:text-white dark:hover:bg-dropdown-dark text-center w-full md:w-auto"
+        >
+          <i class="fa-solid fa-circle-user me-1"></i>
+          Profile
+        </a>
+
+        <a
+          routerLink="/notification"
+          routerLinkActive="bg-mainText text-white shadow-md"
+          class="px-6 py-2 text-sm font-medium rounded-full transition-all duration-300 text-gray-500 hover:text-mainText hover:bg-dropdown dark:hover:text-white dark:hover:bg-dropdown-dark text-center w-full md:w-auto"
+        >
+          <i class="fa-solid fa-bell me-1"></i>
+          Notification
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>

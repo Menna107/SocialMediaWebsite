@@ -1,0 +1,76 @@
+<section class="min-h-screen bg-mainBg dark:bg-mainBg-dark pt-24 pb-10">
+  <div class="max-w-4xl mx-auto px-6">
+    <!-- Header -->
+    <div
+      class="flex items-center justify-between mb-6 bg-formBg dark:bg-formBg-dark border border-borderColor dark:border-borderColor-dark rounded-2xl p-5 shadow-lg"
+    >
+      <div>
+        <h2 class="text-xl font-semibold text-mainText dark:text-mainText-dark">Notifications</h2>
+
+        <p class="text-xs text-gray-500 mt-1">Likes, comments, shares and follows</p>
+      </div>
+
+      <button
+        (click)="markAllAsRead()"
+        class="cursor-pointer text-xs bg-mainText text-white px-4 py-2 rounded-full hover:scale-105 transition"
+      >
+        Mark all as read
+      </button>
+    </div>
+
+    <!-- Notifications -->
+    <div
+      class="bg-formBg dark:bg-formBg-dark border border-borderColor dark:border-borderColor-dark rounded-2xl shadow-lg divide-y divide-borderColor dark:divide-borderColor-dark"
+    >
+      @if (notifications.length === 0) {
+        <div class="text-center py-14 text-gray-500">
+          <i class="fa-regular fa-bell text-3xl mb-3"></i>
+          <p>No notifications yet</p>
+        </div>
+      }
+
+      @for (notif of notifications; track notif._id) {
+        <div
+          class="flex items-start gap-4 p-5 hover:bg-gray-50 dark:hover:bg-dropdown-dark transition cursor-pointer"
+          [class.bg-mainText/5]="!notif.isRead"
+        >
+          <!-- Avatar -->
+          <img [src]="notif.actor?.photo" class="w-12 h-12 rounded-full object-cover" />
+
+          <!-- Content -->
+          <div class="flex-1">
+            <p
+              [routerLink]="['/user', notif.actor._id]"
+              class="hover:underline font-semibold text-mainText dark:text-mainText-dark"
+            >
+              {{ notif.actor?.name }}
+            </p>
+
+            <p class="text-sm text-gray-600 dark:text-gray-300">
+              {{ notif.actor?.name }} {{ getMessage(notif.type) }}
+            </p>
+
+            <span class="text-xs text-gray-400">
+              {{ notif.createdAt | date: 'short' }}
+            </span>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex flex-col items-center justify-center gap-2 min-w-[90px]">
+            @if (!notif.isRead) {
+              <!-- mark as read button -->
+              <div class="flex justify-center dark:border-borderColor-dark pt-3">
+                <button
+                  (click)="markNotificationAsRead(notif)"
+                  class="cursor-pointer text-xs font-medium text-mainText bg-mainText/10 px-4 py-1.5 rounded-full hover:bg-mainText hover:text-white transition-all duration-200"
+                >
+                  Mark as read
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

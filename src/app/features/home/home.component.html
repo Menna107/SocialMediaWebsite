@@ -1,0 +1,284 @@
+<section class="min-h-screen bg-mainBg dark:bg-mainBg-dark pt-24 pb-10">
+  <div class="max-w-7xl mx-auto px-6 grid grid-cols-12 gap-6">
+    <!-- ^================= Sidebar ================= -->
+    <aside class="col-span-3 hidden lg:block">
+      <div class="sticky top-28 space-y-6">
+        <!-- ~Profile Mini Card -->
+        <div
+          routerLink="/profile"
+          class="cursor-pointer bg-formBg dark:bg-formBg-dark border border-borderColor dark:border-borderColor-dark rounded-2xl shadow-lg overflow-hidden"
+        >
+          <!-- Gradient Cover or Image -->
+          <div class="relative h-20 w-full overflow-hidden">
+            @if (userData.cover === '') {
+              <div class="h-full w-full bg-linear-to-r from-mainText to-logoColor"></div>
+            } @else {
+              <img
+                [src]="userData.cover"
+                alt="user cover image"
+                class="block h-full w-full object-cover"
+              />
+            }
+          </div>
+
+          <!-- Avatar + Info -->
+          <div class="flex flex-col items-center px-4 pb-5 -mt-10">
+            <img
+              [src]="userData.photo"
+              class="z-30 w-20 h-20 rounded-full border-4 border-formBg dark:border-formBg-dark shadow-md"
+              alt="user avatar"
+            />
+
+            <h3 class="mt-2 font-semibold text-mainText dark:text-mainText-dark">
+              {{ userData.name }}
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{{ userData.username }}</p>
+
+            <!-- Stats -->
+            <div class="flex justify-center gap-10 w-full mt-4 text-center text-sm">
+              <div>
+                <p class="font-semibold text-mainText dark:text-mainText-dark">
+                  {{ userData.followersCount }}
+                </p>
+                <span class="text-gray-500 text-xs">Followers</span>
+              </div>
+
+              <div>
+                <p class="font-semibold text-mainText dark:text-mainText-dark">
+                  {{ userData.followingCount }}
+                </p>
+                <span class="text-gray-500 text-xs">Following</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ~Menu -->
+        <div class="p-2 bg-formBg dark:bg-formBg-dark shadow-lg overflow-hidden">
+          <!-- Community -->
+          <a
+            (click)="showCommunity()"
+            class="group flex items-center justify-between p-3 transition-all duration-300 border-s-4 border-white dark:border-formBg-dark hover:border-mainText dark:hover:bg-dropdown-dark hover:shadow-md cursor-pointer"
+          >
+            <div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+              <i class="fa-solid fa-house text-sm"></i>
+
+              <span
+                class="text-sm font-medium group-hover:text-mainText dark:group-hover:text-mainText-dark transition"
+              >
+                community
+              </span>
+            </div>
+          </a>
+
+          <!--Profile  -->
+          <a
+            routerLink="/profile"
+            class="group flex items-center justify-between p-3 transition-all duration-300 border-s-4 border-white dark:border-formBg-dark hover:border-mainText dark:hover:bg-dropdown-dark hover:shadow-md cursor-pointer"
+          >
+            <div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+              <i class="fa-solid fa-user text-sm"></i>
+
+              <span
+                class="text-sm font-medium group-hover:text-mainText dark:group-hover:text-mainText-dark transition"
+              >
+                Profile
+              </span>
+            </div>
+          </a>
+
+          <!--Notifications  -->
+          <a
+            routerLink="/notification"
+            class="group flex items-center justify-between p-3 transition-all duration-300 border-s-4 border-white dark:border-formBg-dark hover:border-mainText dark:hover:bg-dropdown-dark hover:shadow-md cursor-pointer"
+          >
+            <div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+              <i class="fa-solid fa-bell text-sm"></i>
+
+              <span
+                class="text-sm font-medium group-hover:text-mainText dark:group-hover:text-mainText-dark transition"
+              >
+                Notifications
+              </span>
+            </div>
+
+            <!-- Notification badge -->
+            <span class="text-xs bg-mainText text-white px-2 py-0.5 rounded-full">
+              {{ unreadCount }}
+            </span>
+          </a>
+
+          <!-- Settings -->
+          <a
+            [routerLink]="['/profile']"
+            [fragment]="'change-password-tab'"
+            class="group flex items-center justify-between p-3 transition-all duration-300 border-s-4 border-white dark:border-formBg-dark hover:border-mainText dark:hover:bg-dropdown-dark hover:shadow-md cursor-pointer"
+          >
+            <div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+              <i class="fa-solid fa-gear text-sm"></i>
+
+              <span
+                class="text-sm font-medium group-hover:text-mainText dark:group-hover:text-mainText-dark transition"
+              >
+                Settings
+              </span>
+            </div>
+          </a>
+
+          <!-- Follow -->
+          <a
+            (click)="openFollowModal()"
+            class="group flex items-center justify-between p-3 transition-all duration-300 border-s-4 border-white dark:border-formBg-dark hover:border-mainText dark:hover:bg-dropdown-dark hover:shadow-md cursor-pointer"
+          >
+            <div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+              <i class="fa-solid fa-user-plus"></i>
+              <span
+                class="text-sm font-medium group-hover:text-mainText dark:group-hover:text-mainText-dark transition"
+              >
+                Follow
+              </span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ^================= Feed ================= -->
+    <main class="col-span-12 lg:col-span-6">
+      <!-- ~Create Post Card -->
+      <app-create-post></app-create-post>
+
+      <!-- ~Posts -->
+      <app-post></app-post>
+    </main>
+
+    <!-- ^================= Right Panel ================= -->
+    <aside class="col-span-3 hidden lg:block">
+      <!-- ~ Add Friends -->
+      <div
+        class="sticky overflow-y-auto top-28 bg-formBg dark:bg-formBg-dark border border-borderColor dark:border-borderColor-dark rounded-2xl shadow-xl p-5 space-y-4"
+      >
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+          <h3 class="font-semibold text-gray-800 dark:text-gray-200">Suggested Friends</h3>
+        </div>
+
+        <!-- Search -->
+        <div class="relative">
+          <input
+            [(ngModel)]="searchTerm"
+            (input)="filterUsers()"
+            type="text"
+            placeholder="Search users..."
+            class="w-full pl-9 pr-3 py-2 text-sm rounded-lg border text-gray-700 dark:text-gray-200 placeholder:text-gray-400 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-borderColor-dark focus:outline-none focus:ring-2 focus:ring-mainText dark:focus:ring-mainText-dark"
+          />
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+        </div>
+
+        <div class="space-y-3">
+          <!-- User Item -->
+          @for (user of filteredUsers.slice(0, 4); track user._id) {
+            @if (filteredUsers.length === 0) {
+              <p class="text-sm text-gray-500 text-center py-2">No users found</p>
+            }
+
+            <div
+              class="cursor-pointer flex items-center justify-between p-2 rounded-xl hover:bg-gray-100 py-2 dark:hover:bg-borderColor-dark transition"
+            >
+              <div class="flex items-center gap-2">
+                <img
+                  alt="user avatar"
+                  [src]="user.photo"
+                  class="w-11 h-11 rounded-full object-cover"
+                />
+                <div>
+                  <p
+                    [routerLink]="['/user', user._id]"
+                    class="text-sm font-medium text-gray-800 dark:text-gray-200 hover:underline"
+                  >
+                    {{ user.name }}
+                  </p>
+                  <span class="text-xs text-gray-500"> {{ user.followersCount }} followers </span>
+                </div>
+              </div>
+
+              <button
+                (click)="followUnFollow(user._id)"
+                class="cursor-pointer text-xs bg-mainText dark:bg-mainText-dark text-white px-4 py-1.5 rounded-full hover:scale-105 transition"
+              >
+                @if (followingLoading === user._id) {
+                  <i class="fa-solid fa-spinner animate-spin"></i>
+                } @else {
+                  Follow
+                }
+              </button>
+            </div>
+          }
+        </div>
+
+        <!-- See More Button -->
+        <button
+          (click)="openFollowModal()"
+          class="cursor-pointer mt-1 w-full py-2 text-sm font-medium rounded-xl bg-mainText text-white hover:bg-mainText-dark transition"
+        >
+          See More
+        </button>
+      </div>
+    </aside>
+  </div>
+</section>
+
+@if (isFollowModalOpen) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <!-- Modal Box -->
+    <div
+      class="bg-white dark:bg-formBg-dark w-[500px] max-h-[80vh] rounded-2xl shadow-xl p-6 overflow-y-auto"
+    >
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="font-semibold text-lg text-gray-800 dark:text-gray-200">Suggested Friends</h3>
+
+        <button
+          (click)="closeFollowModal()"
+          class="cursor-pointer text-gray-500 hover:text-red-500"
+        >
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Users -->
+      <div class="space-y-3">
+        @for (user of followSuggestion; track user._id) {
+          <div
+            class="flex items-center justify-between p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-borderColor-dark transition"
+          >
+            <div class="flex items-center gap-3 cursor-pointer">
+              <img [src]="user.photo" class="w-12 h-12 rounded-full object-cover" />
+
+              <div>
+                <p
+                  [routerLink]="['/user', user._id]"
+                  class="text-sm font-medium text-gray-800 dark:text-gray-200 cursor-pointer hover:underline"
+                >
+                  {{ user.name }}
+                </p>
+                <span class="text-xs text-gray-500"> {{ user.followersCount }} followers </span>
+              </div>
+            </div>
+
+            <button
+              (click)="followUnFollow(user._id)"
+              class="text-xs bg-mainText dark:bg-mainText-dark text-white px-4 py-1.5 rounded-full hover:scale-105 transition"
+            >
+              @if (followingLoading === user._id) {
+                <i class="fa-solid fa-spinner animate-spin"></i>
+              } @else {
+                Follow
+              }
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}

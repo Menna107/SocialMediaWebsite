@@ -1,0 +1,106 @@
+<form (submit)="saveData($event)">
+  <div
+    class="bg-formBg dark:bg-formBg-dark border border-borderColor dark:border-borderColor-dark rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-6"
+  >
+    <!-- Header -->
+    <div class="flex items-start gap-4">
+      <img
+        [src]="userData.photo"
+        class="w-12 h-12 rounded-full object-cover ring-2 ring-mainText/30"
+        alt="user avatar"
+      />
+
+      <div class="flex flex-col">
+        <p class="font-semibold text-gray-800 dark:text-gray-200">{{ userData.name }}</p>
+
+        <!-- Post Privacy -->
+        <div class="relative mt-1 w-fit">
+          @if (postPrivacy.value === 'public') {
+            <i
+              class="fa-solid fa-earth-americas absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none"
+            ></i>
+          } @else if (postPrivacy.value === 'following') {
+            <i
+              class="fa-solid fa-user-group absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none"
+            ></i>
+          } @else if (postPrivacy.value === 'only_me') {
+            <i
+              class="fa-solid fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none"
+            ></i>
+          }
+
+          <select
+            [formControl]="postPrivacy"
+            title="shareWith"
+            id="shareWith"
+            class="text-xs bg-gray-100 dark:bg-borderColor-dark text-gray-600 dark:text-gray-300 pl-8 pr-6 py-1.5 rounded-lg outline-none focus:ring-2 focus:ring-mainText dark:focus:ring-mainText-dark transition appearance-none"
+          >
+            <option value="public">Public</option>
+            <option value="following">Followers</option>
+            <option value="only_me">Only me</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Textarea -->
+    <div class="mt-4">
+      <textarea
+        [formControl]="postDescription"
+        placeholder="What's on your mind?"
+        class="w-full resize-none border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-borderColor-dark rounded-xl px-4 py-3 text-sm text-gray-700 dark:text-gray-200 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-mainText dark:focus:ring-mainText-dark transition"
+        rows="3"
+      ></textarea>
+    </div>
+
+    <!-- Image Preview -->
+    @if (imagePreview) {
+      <div class="mt-4 relative">
+        <img
+          title="imageChosen"
+          [src]="imagePreview"
+          class="w-full max-h-80 object-cover rounded-xl border border-borderColor dark:border-borderColor-dark"
+        />
+
+        <button
+          type="button"
+          (click)="removeImage()"
+          class="cursor-pointer absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-lg hover:bg-black/60"
+        >
+          <i class="fa-solid fa-x"></i>
+        </button>
+      </div>
+    }
+
+    <!-- Actions -->
+    <div
+      class="flex flex-wrap justify-between items-center mt-5 pt-4 border-t border-borderColor dark:border-borderColor-dark gap-3"
+    >
+      <!--  Choose Photo -->
+      <div class="flex items-center gap-5">
+        <label
+          [for]="'file-' + (postToEdit?._id || 'new')"
+          class="flex items-center gap-2 text-sm text-mainText dark:text-mainText-dark cursor-pointer hover:scale-105 transition"
+        >
+          <i class="fa-regular fa-image text-base"></i>
+          Photo/Video
+        </label>
+        <input
+          accept="image/*"
+          (change)="prepareUploadedFile($event)"
+          [id]="'file-' + (postToEdit?._id || 'new')"
+          type="file"
+          class="hidden"
+        />
+      </div>
+
+      <!-- Post Button -->
+      <button
+        [disabled]="!postDescription.value"
+        class="disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer d-flex items-center bg-mainText disabled:hover:bg-mainText dark:bg-mainText-dark hover:bg-hoverBtnColor dark:hover:bg-hoverBtnColor disabled:dark:hover:bg-mainText-dark text-white px-7 py-2 rounded-xl text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg active:scale-95"
+      >
+        <span>Post</span> <i class="ms-2 fa-regular fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+</form>

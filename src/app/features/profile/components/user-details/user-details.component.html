@@ -1,0 +1,138 @@
+<div class="animate-fade-in pb-10 space-y-6">
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div
+      class="bg-white dark:bg-white/5 p-5 rounded-2xl border border-borderColor dark:border-borderColor-dark shadow-sm"
+    >
+      <span class="text-2xs font-bold text-gray-400 uppercase tracking-widest block mb-1"
+        >Posts</span
+      >
+      <h4 class="text-2xl font-black text-mainText dark:text-mainText-dark">
+        {{ postsCount }}
+      </h4>
+    </div>
+    <div
+      class="bg-white dark:bg-white/5 p-5 rounded-2xl border border-borderColor dark:border-borderColor-dark shadow-sm"
+    >
+      <span class="text-2xs font-bold text-gray-400 uppercase tracking-widest block mb-1"
+        >Followers</span
+      >
+      <h4 class="text-2xl font-black text-mainText dark:text-mainText-dark">
+        {{ userData.followersCount }}
+      </h4>
+    </div>
+    <div
+      class="bg-white dark:bg-white/5 p-5 rounded-2xl border border-borderColor dark:border-borderColor-dark shadow-sm"
+    >
+      <span class="text-2xs font-bold text-gray-400 uppercase tracking-widest block mb-1"
+        >Following</span
+      >
+      <h4 class="text-2xl font-black text-mainText dark:text-mainText-dark">
+        {{ userData.followingCount }}
+      </h4>
+    </div>
+    <div class="bg-mainText p-5 rounded-2xl shadow-lg shadow-mainText/20">
+      <span class="text-2xs font-bold text-white/70 uppercase tracking-widest block mb-1"
+        >Bookmarked</span
+      >
+      <h4 class="text-2xl font-black text-white">{{ userData.bookmarksCount }}</h4>
+    </div>
+  </div>
+
+  <div
+    class="relative overflow-hidden bg-white dark:bg-white/5 p-6 md:p-8 rounded-3xl border border-borderColor dark:border-borderColor-dark shadow-sm"
+  >
+    <div class="absolute -top-10 -right-10 w-40 h-40 bg-mainText/5 rounded-full blur-3xl"></div>
+
+    <div
+      class="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-6"
+    >
+      <div class="space-y-6">
+        <div class="flex items-center gap-2">
+          <div class="p-2 bg-mainText/10 rounded-lg">
+            <i class="fa-solid fa-id-card text-mainText"></i>
+          </div>
+          <h3 class="font-bold text-mainText dark:text-mainText-dark">Profile Summary</h3>
+        </div>
+
+        <div class="space-y-4">
+          <p class="text-2xl md:text-3xl font-black text-mainText dark:text-white leading-none">
+            {{ userData.name }}
+          </p>
+          <p class="text-lg text-gray-500 font-medium">@{{ userData.username }}</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full md:w-auto">
+        <div class="p-4 rounded-2xl bg-gray-50 dark:bg-white/5 border border-borderColor/50">
+          <p class="text-2xs font-bold text-gray-400 uppercase mb-1">Account Status</p>
+          <div class="flex items-center gap-2 text-green-500 font-bold text-sm">
+            <i class="fa-solid fa-circle-check text-2xs"></i> Active User
+          </div>
+        </div>
+        <div class="p-4 rounded-2xl bg-gray-50 dark:bg-white/5 border border-borderColor/50">
+          <p class="text-2xs font-bold text-gray-400 uppercase mb-1">Member Since</p>
+          <div class="flex items-center gap-2 text-mainText dark:text-gray-300 font-bold text-sm">
+            <i class="fa-solid fa-calendar text-2xs opacity-50"></i> {{ userData.createdAt | date }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="bg-white dark:bg-mainBg-dark p-6 md:p-8 rounded-2xl border border-borderColor dark:border-borderColor-dark shadow-sm"
+  >
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Birthday -->
+      <div class="flex items-center gap-4">
+        <div
+          class="w-12 h-12 bg-pink-100 dark:bg-white/5 rounded-full flex items-center justify-center text-pink-500"
+        >
+          <i class="fa-solid fa-cake-candles"></i>
+        </div>
+
+        <div>
+          <p class="text-xs text-gray-400 uppercase font-bold tracking-tighter">Date of Birth</p>
+
+          <p class="text-mainText dark:text-white font-semibold">
+            {{ userData.dateOfBirth | date: 'longDate' }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Gender -->
+      <div class="flex items-center gap-4">
+        <div
+          class="w-12 h-12 bg-blue-100 dark:bg-white/5 rounded-full flex items-center justify-center text-blue-500"
+        >
+          <i class="fa-solid fa-venus-mars"></i>
+        </div>
+
+        <div>
+          <p class="text-xs text-gray-400 uppercase font-bold tracking-tighter">Gender</p>
+
+          <p class="text-mainText dark:text-white font-semibold capitalize">
+            {{ userData.gender }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="bg-white dark:bg-mainBg-dark p-6 md:p-8 rounded-2xl border border-borderColor dark:border-borderColor-dark shadow-sm"
+  >
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div class="flex items-center gap-4">
+        <div
+          class="w-12 h-12 bg-gray-100 dark:bg-white/5 rounded-full flex items-center justify-center text-mainText"
+        >
+          <i class="fa-solid fa-envelope"></i>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400 uppercase font-bold tracking-tighter">Verified Email</p>
+          <p class="text-mainText dark:text-white font-semibold">{{ userData.email }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
