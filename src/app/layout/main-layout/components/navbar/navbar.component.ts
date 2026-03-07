@@ -3,6 +3,8 @@ import { AuthService } from '../../../../core/auth/services/auth.service';
 import { initFlowbite } from 'flowbite';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import Swal from 'sweetalert2';
+import { UserService } from '../../../../core/services/user/user.service';
+import { Iuser } from '../../../../core/models/iuser.interface';
 
 @Component({
   selector: 'app-navbar',
@@ -13,24 +15,33 @@ import Swal from 'sweetalert2';
 export class NavbarComponent implements AfterViewInit, OnInit {
   private readonly authService = inject(AuthService);
 
+  userData!: Iuser;
+  private readonly userService = inject(UserService);
+
   ngAfterViewInit(): void {
     initFlowbite();
   }
+  ngOnInit(): void {
+    this.isDark = document.documentElement.classList.contains('dark');
+    this.getProfile();
+  }
 
-  userData: any = null;
+  // ^Get Profile Data
+  getProfile() {
+    this.userService.getMyProfile().subscribe({
+      next: (res) => {
+        this.userData = res.data.user;
+        console.log(this.userData);
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
 
   // Theme Mode
   isDark = false;
   bgColor: string = '#f9f9fb';
-
-  ngOnInit(): void {
-    this.isDark = document.documentElement.classList.contains('dark');
-
-    const storedUser = localStorage.getItem('socialUser');
-    if (storedUser) {
-      this.userData = JSON.parse(storedUser);
-    }
-  }
 
   toggleTheme() {
     this.isDark = !this.isDark;

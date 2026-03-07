@@ -10,6 +10,8 @@ import {
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PostsService } from '../../../core/services/posts/posts.service';
 import { Ipost } from '../../../core/models/ipost.interface';
+import { UserService } from '../../../core/services/user/user.service';
+import { Iuser } from '../../../core/models/iuser.interface';
 
 @Component({
   selector: 'app-create-post',
@@ -22,7 +24,6 @@ export class CreatePostComponent implements OnInit {
   @Input() postToEdit: Ipost | null = null;
   @Output() closeModalEvent = new EventEmitter<void>();
   @Output() refreshPostsEvent = new EventEmitter<void>();
-  userData: any = null;
 
   // 1- UploadedFile
   uploadedFile: File | null = null;
@@ -33,6 +34,26 @@ export class CreatePostComponent implements OnInit {
   // privacy option
   postPrivacy: FormControl = new FormControl('public');
 
+  userData!: Iuser;
+  private readonly userService = inject(UserService);
+
+  ngOnInit(): void {
+    this.getProfile();
+  }
+
+  // ^Get Profile Data
+  getProfile() {
+    this.userService.getMyProfile().subscribe({
+      next: (res) => {
+        this.userData = res.data.user;
+        console.log(this.userData);
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['postToEdit'] && this.postToEdit) {
       this.postDescription.setValue(this.postToEdit.body);
@@ -40,13 +61,6 @@ export class CreatePostComponent implements OnInit {
 
       this.imagePreview = this.postToEdit.image || null;
       this.uploadedFile = null;
-    }
-  }
-
-  ngOnInit(): void {
-    const storedUser = localStorage.getItem('socialUser');
-    if (storedUser) {
-      this.userData = JSON.parse(storedUser);
     }
   }
 
