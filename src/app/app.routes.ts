@@ -18,7 +18,7 @@ export const routes: Routes = [
     component: AuthLayoutComponent,
     canActivate: [guestGuard],
     children: [
-      { path: 'login', component: LoginComponent, title: 'Socialio: Login' },
+      { path: 'login', component: LoginComponent, title: 'Sociax: Login' },
       { path: 'signup', component: SignUpComponent, title: 'Sociax: Sign Up' },
       { path: 'forget', component: ForgotPasswordComponent, title: 'Sociax: Forget Password' },
     ],
