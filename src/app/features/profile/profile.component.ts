@@ -80,6 +80,10 @@ export class ProfileComponent implements OnInit {
       next: (res) => {
         console.log(res);
         this.myPosts = [...res.data.posts];
+
+        setTimeout(() => {
+          initFlowbite();
+        });
       },
       error: (err) => {
         console.log(err);
@@ -93,6 +97,10 @@ export class ProfileComponent implements OnInit {
       next: (res) => {
         console.log(res);
         this.bookmarksPosts = res.data.bookmarks;
+
+        setTimeout(() => {
+          initFlowbite();
+        });
       },
       error: (err) => {
         console.log(err);
