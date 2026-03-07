@@ -31,7 +31,7 @@
 
       @for (notif of notifications; track notif._id) {
         <div
-          class="flex items-start gap-4 p-5 hover:bg-gray-50 dark:hover:bg-dropdown-dark transition cursor-pointer"
+          class="flex items-start gap-4 p-5 hover:bg-gray-50 rounded-2xl dark:hover:bg-dropdown-dark transition cursor-pointer"
           [class.bg-mainText/5]="!notif.isRead"
         >
           <!-- Avatar -->

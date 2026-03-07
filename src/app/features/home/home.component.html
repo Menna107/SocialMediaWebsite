@@ -10,8 +10,8 @@
         >
           <!-- Gradient Cover or Image -->
           <div class="relative h-20 w-full overflow-hidden">
-            @if (userData.cover === '') {
-              <div class="h-full w-full bg-linear-to-r from-mainText to-logoColor"></div>
+            @if (!userData.cover) {
+              <div class="h-full w-full bg-gradient-to-r from-mainText to-logoColor"></div>
             } @else {
               <img
                 [src]="userData.cover"

@@ -178,6 +178,7 @@ export class ProfileComponent implements OnInit {
             console.log(res);
             if (res.success) {
               this.getProfile();
+              this.userData.cover = '';
 
               Swal.fire({
                 title: 'Cover Deleted!',
