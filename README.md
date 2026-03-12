@@ -1,59 +1,66 @@
-# SocialMediaApp
+# 📱Sociax : Social Media Website
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.14.
+A modern **Social Media Web Application** where users can create accounts, share posts, interact with others, and explore a dynamic social feed.
 
-## Development server
+🔗 **Live Demo:**
+https://social-media-website-virid.vercel.app/#/login
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+## 🚀 Features
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+*  User Authentication (Login / Register)
+*  Create and Share Posts
+*  Create and Reply Comments
+*  Like and Interact with Posts
+*  Like and Interact with Comments
+*  User Profiles
+*  Change Password
+*  Dynamic Social Feed
+*  Responsive Design
+*  Fast Performance
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🛠️ Technologies Used
 
-```bash
-ng generate component component-name
-```
+* **Frontend:** Angular
+* **Styling:** CSS / Tailwind
+* **Deployment:** Vercel
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+⚙️ Angular Concepts Used
 
-## Building
+* HTTP Client for API communication
+* HTTP Interceptors for handling requests and responses
+* Pipes for transforming and formatting data
+* Routing & Route Guards
+* Component-based Architecture
+* Services for API integration
 
-To build the project run:
+---
 
-```bash
-ng build
-```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 🌐 Deployment
 
-## Running unit tests
+The project is deployed using **Vercel**.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+---
 
-```bash
-ng test
-```
+## 📸 Screenshots
+<img width="1919" height="874" alt="image" src="https://github.com/user-attachments/assets/777c1147-d4e7-4c4c-bc38-cbbba2c3709f" />
+<img width="1907" height="881" alt="image" src="https://github.com/user-attachments/assets/737472aa-5480-4b78-805f-49c49c377caa" />
+<img width="1919" height="892" alt="image" src="https://github.com/user-attachments/assets/ce65876f-6c15-4e03-841f-d7a6860bd596" />
+<img width="1919" height="874" alt="image" src="https://github.com/user-attachments/assets/f404ad95-f850-4409-9962-365a8e784b00" />
 
-## Running end-to-end tests
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
-```
+## 📧 Contact
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+If you have any questions or suggestions, feel free to reach out.
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+⭐ Don't forget to **star the repo** if you like the project!
